@@ -14,47 +14,11 @@ from info import CHANNELS, REQUEST_TO_JOIN_MODE, TRY_AGAIN_BTN, ADMINS, SHORTLIN
 from utils import get_settings, pub_is_subscribed, get_size, is_subscribed, save_group_settings, temp, verify_user, check_token, check_verification, get_token, get_shortlink, get_tutorial, get_seconds
 from database.connections_mdb import active_connection
 from urllib.parse import quote_plus
-from pyrogram.types import ChatMemberUpdated
 from TechVJ.util.file_properties import get_name, get_hash, get_media_file_size
 logger = logging.getLogger(__name__)
 
 BATCH_FILES = {}
 join_db = JoinReqs
-
-
-OWNER_ID = 123456789  # Apna Telegram numeric user ID daalo
-
-@Client.on_chat_member_updated()
-async def bot_added_to_group(client, event: ChatMemberUpdated):
-    try:
-        # Check bot added
-        if event.new_chat_member and event.new_chat_member.user.is_self:
-
-            chat = event.chat
-            added_by = event.from_user
-
-            # Group full info fetch
-            try:
-                members = await client.get_chat_members_count(chat.id)
-            except:
-                members = "Unknown"
-
-            text = f"""
-🔔 **Bot Added To New Group**
-
-📌 **Group Name:** `{chat.title}`
-🆔 **Group ID:** `{chat.id}`
-👤 **Added By:** {added_by.mention if added_by else 'Unknown'}
-📊 **Members Count:** {members}
-
-⚙️ **Status:** Bot is now active in this group.
-            """
-
-            # Owner ko message send
-            await client.send_message(OWNER_ID, text)
-
-    except Exception as e:
-        print("Error in add-group-logger:", e)
 
 @Client.on_message(filters.command("start") & filters.incoming)
 async def start(client, message):
