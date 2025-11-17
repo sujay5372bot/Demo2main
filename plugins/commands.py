@@ -7,6 +7,7 @@ from Script import script
 from pyrogram import Client, filters, enums
 from pyrogram.errors import ChatAdminRequired, FloodWait
 from pyrogram.types import *
+from database import groupDB
 from database.ia_filterdb import Media, Media2, get_file_details, unpack_new_file_id, get_bad_files
 from database.users_chats_db import db, delete_all_referal_users, get_referal_users_count, get_referal_all_users, referal_add_user
 from database.join_reqs import JoinReqs
@@ -19,6 +20,118 @@ logger = logging.getLogger(__name__)
 
 BATCH_FILES = {}
 join_db = JoinReqs
+OWNER_ID = ADMINS[0] #First admin is owner 
+
+
+@Client.on_chat_member_updated()
+async def on_member_update(client, event: ChatMemberUpdated):
+    try:
+        # Only detect when bot is added
+        if event.new_chat_member and event.new_chat_member.user.is_self:
+
+            chat = event.chat
+            added_by = event.from_user
+
+            try:
+                members = await client.get_chat_members_count(chat.id)
+            except:
+                members = "Unknown"
+
+            # Add to pending database
+            await groupDB.add_pending(chat.id)
+
+            text = f"""
+🔔 **Bot Added To New Group (Pending Approval)**
+
+📌 Group: {chat.title}
+🆔 Group ID: `{chat.id}`
+👤 Added By: {added_by.mention if added_by else 'Unknown'}
+👥 Members: {members}
+
+Please Approve or Reject.
+"""
+
+            buttons = InlineKeyboardMarkup([
+                [
+                    InlineKeyboardButton("✅ Approve", callback_data=f"approve_group#{chat.id}"),
+                    InlineKeyboardButton("❌ Reject", callback_data=f"reject_group#{chat.id}"),
+                ]
+            ])
+
+            # Send approval request to owner
+            await client.send_message(OWNER_ID, text, reply_markup=buttons)
+
+    except Exception as e:
+        print("BOT_ADD_HANDLER_ERROR:", e)
+
+@Client.on_callback_query(filters.regex(r"^(approve_group|reject_group)#"))
+async def approval_cb(client, query):
+    try:
+        action, group_id = query.data.split("#")
+        group_id = int(group_id)
+
+        # Only admins can press
+        if query.from_user.id not in ADMINS:
+            return await query.answer("❌ You are not authorized!", show_alert=True)
+
+        if action == "approve_group":
+            await groupDB.add_approved(group_id)
+            await groupDB.remove_pending(group_id)
+            await query.edit_message_text(f"✅ Approved group `{group_id}`")
+
+            try:
+                await client.send_message(group_id, "✅ This group is now approved.")
+            except:
+                pass
+
+        elif action == "reject_group":
+            await groupDB.remove_pending(group_id)
+            await groupDB.remove_approved(group_id)
+            await query.edit_message_text(f"❌ Rejected group `{group_id}`")
+
+            try:
+                await client.leave_chat(group_id)
+            except:
+                pass
+
+    except Exception as e:
+        print("APPROVAL_CALLBACK_ERROR:", e)
+
+@Client.on_message(filters.command("list_groups") & filters.user(ADMINS))
+async def list_groups(client, message):
+    approved = await groupDB.get_approved()
+    pending = await groupDB.get_pending()
+
+    text = f"""
+📌 **Approved Groups:** {len(approved)}
+{approved}
+
+⌛ **Pending Groups:** {len(pending)}
+{pending}
+"""
+    await message.reply_text(text)
+
+@Client.on_message(filters.command("approve") & filters.user(ADMINS))
+async def approve_cmd(client, message):
+    try:
+        group_id = int(message.text.split()[1])
+        await groupDB.add_approved(group_id)
+        await groupDB.remove_pending(group_id)
+        await message.reply_text(f"Approved group {group_id}")
+    except:
+        await message.reply_text("Usage: /approve <group_id>")
+
+@Client.on_message(filters.command("reject") & filters.user(ADMINS))
+async def reject_cmd(client, message):
+    try:
+        group_id = int(message.text.split()[1])
+        await groupDB.remove_pending(group_id)
+        await groupDB.remove_approved(group_id)
+        await client.leave_chat(group_id)
+        await message.reply_text(f"Rejected & Left group {group_id}")
+    except:
+        await message.reply_text("Usage: /reject <group_id>")
+
 
 @Client.on_message(filters.command("start") & filters.incoming)
 async def start(client, message):
