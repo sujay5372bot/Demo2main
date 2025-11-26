@@ -23,6 +23,46 @@ join_db = JoinReqs
 OWNER_ID = ADMINS[0] #First admin is owner 
 
 
+from datetime import timedelta
+
+# --- yaha apna specific word list daalo ---
+BLOCK_WORDS = ["badword", "scam", "promo", "🥵", "XXX", "sex", "pom", "gar", "madarchod", "randi"]  # <- yaha apne words daalna
+
+# --- Time Ban Duration ---
+BAN_DURATION = 30  # minutes
+
+@Client.on_message(filters.group & ~filters.edited)
+async def auto_block_words(client, message):
+    if not message.text:
+        return
+
+    text = message.text.lower()
+
+    # Check if message contains blocked words
+    if any(word in text for word in BLOCK_WORDS):
+
+        try:
+            # Delete Message
+            await message.delete()
+
+            # Time ban user
+            await client.restrict_chat_member(
+                chat_id=message.chat.id,
+                user_id=message.from_user.id,
+                permissions={},  # no permissions = muted
+                until_date=message.date + timedelta(minutes=BAN_DURATION)
+            )
+
+            # Optional warning message
+            await message.reply_text(
+                f"⚠️ **Forbidden word detected!**\n"
+                f"User muted for **{BAN_DURATION} minutes**."
+            )
+
+        except Exception as e:
+            print(e)
+
+
 @Client.on_chat_member_updated()
 async def on_member_update(client, event: ChatMemberUpdated):
     try:
