@@ -33,6 +33,44 @@ BUTTONS1 = {}
 BUTTONS2 = {}
 SPELL_CHECK = {}
 
+
+# --- yaha apna specific word list daalo ---
+BLOCK_WORDS = ["badword", "scam", "promo", "sex", "xxx", "sex", "randi", "madarchod"]  # <- yaha apne words daalna
+
+# --- Time Ban Duration ---
+BAN_DURATION = 30  # minutes
+
+@Client.on_message(filters.group & ~filters.edited)
+async def auto_block_words(client, message):
+    if not message.text:
+        return
+
+    text = message.text.lower()
+
+    # Check if message contains blocked words
+    if any(word in text for word in BLOCK_WORDS):
+
+        try:
+            # Delete Message
+            await message.delete()
+
+            # Time ban user
+            await client.restrict_chat_member(
+                chat_id=message.chat.id,
+                user_id=message.from_user.id,
+                permissions={},  # no permissions = muted
+                until_date=message.date + timedelta(minutes=BAN_DURATION)
+            )
+
+            # Optional warning message
+            await message.reply_text(
+                f"⚠️ **Forbidden word detected!**\n"
+                f"User muted for **{BAN_DURATION} minutes**."
+            )
+
+        except Exception as e:
+            print(e)
+
 @Client.on_message(filters.group & filters.text & filters.incoming)
 async def give_filter(client, message):
     if message.chat.id != SUPPORT_CHAT_ID:
