@@ -37,7 +37,7 @@ SPELL_CHECK = {}
 # --- yaha apna specific word list daalo ---
 BAD_WORDS = ["sex", "xxx", "https", "http", "randi", "madarchod"]
 
-@Client.on_message(filters.group)
+@Client.on_message(filters.group, group=0)
 async def bad_word_filter(client, message):
 
     # ignore service messages / media
