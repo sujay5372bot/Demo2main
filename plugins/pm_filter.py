@@ -58,7 +58,7 @@ async def bad_word_filter(client, message):
                 )
             except Exception as e:
                 print(e)
-            return  # stop only if bad word found
+           # return  # stop only if bad word found
 
     # IMPORTANT
     # Do NOT return here
