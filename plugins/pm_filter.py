@@ -35,38 +35,38 @@ SPELL_CHECK = {}
 
 
 # --- yaha apna specific word list daalo ---
-BAD_WORDS = ["sex", "xxx", "https", "http", "randi", "madarchod"]
+#BAD_WORDS = ["sex", "xxx", "https", "http", "randi", "madarchod"]
 
-@Client.on_message(filters.group, group=0)
-async def bad_word_filter(client, message):
+#@Client.on_message(filters.group, group=0)
+#async def bad_word_filter(client, message):
 
     # ignore service messages / media
-    if not message.text:
-        return
-
-    text = message.text.lower()
-    found_bad_word = False
+#    if not message.text:
+#        return
+#
+#    text = message.text.lower()
+#    found_bad_word = False
 
     # check for bad words
-    for word in BAD_WORDS:
-        if word in text:
-            found_bad_word = True
-            try:
-                await message.delete()
-                await client.ban_chat_member(
-                    message.chat.id,
-                    message.from_user.id,
-                    until_date=int(time.time() + 60)
-                )
-                print(f"Banned user {message.from_user.id} for bad word: {word}")
-            except Exception as e:
-                print(e)
-            break  # stop checking after first bad word
+ #   for word in BAD_WORDS:
+ #       if word in text:
+#            found_bad_word = True
+ #           try:
+  #              await message.delete()
+ #               await client.ban_chat_member(
+  #                  message.chat.id,
+ #                   message.from_user.id,
+  #                  until_date=int(time.time() + 60)
+ #               )
+#                print(f"Banned user {message.from_user.id} for bad word: {word}")
+ #           except Exception as e:
+#                print(e)
+ #           break  # stop checking after first bad word
 
     # Agar koi bad word nahi mila, to yeh code chalega
-    if not found_bad_word:
+ #   if not found_bad_word:
         # Yahan aapka normal code ya aur actions likh sakte ho
-        print("No bad words found..")
+#        print("No bad words found..")
            # return  # stop only if bad word found
 
     # IMPORTANT
