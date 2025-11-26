@@ -164,7 +164,7 @@ async def approve_cmd(client, message):
     except:
         await message.reply_text("Usage: /approve <group_id>")
 
-@Client.on_message(filters.command("reject") & filters.user(ADMINS))
+@Client.on_message(filters.command("reject") & filters.user(ADMINS) & approved_group)
 async def reject_cmd(client, message):
     try:
         group_id = int(message.text.split()[1])
@@ -176,7 +176,7 @@ async def reject_cmd(client, message):
         await message.reply_text("Usage: /reject <group_id>")
 
 
-@Client.on_message(filters.command("start") & filters.incoming)
+@Client.on_message(filters.command("start") & filters.incoming & approved_group)
 async def start(client, message):
     await message.react(emoji="🔥")
     if message.chat.type in [enums.ChatType.GROUP, enums.ChatType.SUPERGROUP]:
@@ -798,7 +798,7 @@ async def start(client, message):
     await k.edit_text("<b>Your File/Video is successfully deleted!!!\n\nClick below button to get your deleted file 👇</b>",reply_markup=InlineKeyboardMarkup(btn))
     return   
 
-@Client.on_message(filters.command('channel') & filters.user(ADMINS))
+@Client.on_message(filters.command('channel') & filters.user(ADMINS) & approved_group)
 async def channel_info(bot, message):
     if isinstance(CHANNELS, (int, str)):
         channels = [CHANNELS]
@@ -827,14 +827,14 @@ async def channel_info(bot, message):
         os.remove(file)
 
 
-@Client.on_message(filters.command('logs') & filters.user(ADMINS))
+@Client.on_message(filters.command('logs') & filters.user(ADMINS) & approved_group)
 async def log_file(bot, message):
     try:
         await message.reply_document('TELEGRAM BOT.LOG')
     except Exception as e:
         await message.reply(str(e))
 
-@Client.on_message(filters.command('delete') & filters.user(ADMINS))
+@Client.on_message(filters.command('delete') & filters.user(ADMINS) & approved_group)
 async def delete(bot, message):
     reply = message.reply_to_message
     if reply and reply.media:
@@ -902,7 +902,7 @@ async def delete(bot, message):
                         await msg.edit('Fɪʟᴇ ɴᴏᴛ ғᴏᴜɴᴅ ɪɴ ᴅᴀᴛᴀʙᴀsᴇ')
 
 
-@Client.on_message(filters.command('deleteall') & filters.user(ADMINS))
+@Client.on_message(filters.command('deleteall') & filters.user(ADMINS) & approved_group)
 async def delete_all_index(bot, message):
     await message.reply_text(
         'This will delete all indexed files.\nDo you want to continue??',
@@ -924,7 +924,7 @@ async def delete_all_index(bot, message):
     )
 
 
-@Client.on_callback_query(filters.regex(r'^autofilter_delete'))
+@Client.on_callback_query(filters.regex(r'^autofilter_delete') & approved_group)
 async def delete_all_index_confirm(bot, message):
     await Media.collection.drop()
     await Media2.collection.drop()
@@ -932,7 +932,7 @@ async def delete_all_index_confirm(bot, message):
     await message.message.edit('Succesfully Deleted All The Indexed Files.')
 
 
-@Client.on_message(filters.command('settings'))
+@Client.on_message(filters.command('settings') & approved_group)
 async def settings(client, message):
     userid = message.from_user.id if message.from_user else None
     if not userid:
@@ -1204,7 +1204,7 @@ async def settings(client, message):
 
 
 
-@Client.on_message(filters.command('set_template'))
+@Client.on_message(filters.command('set_template') & approved_group)
 async def save_template(client, message):
     sts = await message.reply("Checking template")
     userid = message.from_user.id if message.from_user else None
@@ -1248,7 +1248,7 @@ async def save_template(client, message):
     await sts.edit(f"Successfully changed template for {title} to\n\n{template}")
 
 
-@Client.on_message((filters.command(["request", "Request"]) | filters.regex("#request") | filters.regex("#Request")) & filters.group)
+@Client.on_message((filters.command(["request", "Request"]) | filters.regex("#request") | filters.regex("#Request")) & filters.group & approved_group)
 async def requests(bot, message):
     if REQST_CHANNEL is None or SUPPORT_CHAT_ID is None: return # Must add REQST_CHANNEL and SUPPORT_CHAT_ID to use this feature
     if message.reply_to_message and SUPPORT_CHAT_ID == message.chat.id:
@@ -1328,7 +1328,7 @@ async def requests(bot, message):
               ]]
         await message.reply_text("<b>Your request has been added! Please wait for some time.\n\nJoin Channel First & View Request</b>", reply_markup=InlineKeyboardMarkup(btn))
     
-@Client.on_message(filters.command("send") & filters.user(ADMINS))
+@Client.on_message(filters.command("send") & filters.user(ADMINS) & approved_group)
 async def send_msg(bot, message):
     if message.reply_to_message:
         target_id = message.text.split(" ", 1)[1]
@@ -1354,7 +1354,7 @@ async def send_msg(bot, message):
     else:
         await message.reply_text("<b>Use this command as a reply to any message using the target chat id. For eg: /send userid</b>")
 
-@Client.on_message(filters.command("deletefiles") & filters.user(ADMINS))
+@Client.on_message(filters.command("deletefiles") & filters.user(ADMINS) & approved_group)
 async def deletemultiplefiles(bot, message):
     chat_type = message.chat.type
     if chat_type != enums.ChatType.PRIVATE:
