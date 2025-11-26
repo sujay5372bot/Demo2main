@@ -31,7 +31,7 @@ BLOCK_WORDS = ["badword", "scam", "promo", "🥵", "XXX", "sex", "pom", "gar", "
 # --- Time Ban Duration ---
 BAN_DURATION = 30  # minutes
 
-@Client.on_message(filters.group & ~filters.edited)
+@Client.on_message(filters.group)
 async def auto_block_words(client, message):
     if not message.text:
         return
