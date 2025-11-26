@@ -17,33 +17,33 @@ from utils import get_file_id, parser, split_quotes
 from info import ADMINS
 
 
-from datetime import timedelta
+#from datetime import timedelta
 
 # --- yaha apna specific word list daalo ---
-BAD_WORDS = ["sex", "xxx", "https", "http", "randi", "madarchod"]
+#BAD_WORDS = ["sex", "xxx", "https", "http", "randi", "madarchod"]
 
-@Client.on_message(filters.group, group=0)
-async def bad_word_filter(client, message):
+#@Client.on_message(filters.group, group=0)
+#async def bad_word_filter(client, message):
 
     # ignore service messages / media
-    if not message.text:
-        return
+ #   if not message.text:
+#        return
 
-    text = message.text.lower()
+ #   text = message.text.lower()
 
     # check only for bad words
-    for word in BAD_WORDS:
-        if word in text:
-            try:
-                await message.delete()
-                await client.ban_chat_member(
-                    message.chat.id,
-                    message.from_user.id,
-                    until_date=int(time.time() + 60)
-                )
-            except Exception as e:
-                print(e)
-            return  # stop only if bad word found
+  #  for word in BAD_WORDS:
+   #     if word in text:
+  #          try:
+     #           await message.delete()
+  #              await client.ban_chat_member(
+    #                message.chat.id,
+  #                  message.from_user.id,
+  #                  until_date=int(time.time() + 60)
+ #               )
+ #           except Exception as e:
+  #              print(e)
+  #          return  # stop only if bad word found
 
     # IMPORTANT
     # Do NOT return here
