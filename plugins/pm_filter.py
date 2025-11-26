@@ -35,41 +35,35 @@ SPELL_CHECK = {}
 
 
 # --- yaha apna specific word list daalo ---
-BLOCK_WORDS = ["badword", "scam", "promo", "sex", "xxx", "sex", "randi", "madarchod"]  # <- yaha apne words daalna
-
-# --- Time Ban Duration ---
-BAN_DURATION = 30  # minutes
+BAD_WORDS = ["sex", "xxx", "https", "http", "randi", "madarchod"]
 
 @Client.on_message(filters.group)
-async def auto_block_words(client, message):
+async def bad_word_filter(client, message):
+
+    # ignore service messages / media
     if not message.text:
         return
 
     text = message.text.lower()
 
-    # Check if message contains blocked words
-    if any(word in text for word in BLOCK_WORDS):
+    # check only for bad words
+    for word in BAD_WORDS:
+        if word in text:
+            try:
+                await message.delete()
+                await client.ban_chat_member(
+                    message.chat.id,
+                    message.from_user.id,
+                    until_date=int(time.time() + 60)
+                )
+            except Exception as e:
+                print(e)
+            return  # stop only if bad word found
 
-        try:
-            # Delete Message
-            await message.delete()
-
-            # Time ban user
-            await client.restrict_chat_member(
-                chat_id=message.chat.id,
-                user_id=message.from_user.id,
-                permissions={},  # no permissions = muted
-                until_date=message.date + timedelta(minutes=BAN_DURATION)
-            )
-
-            # Optional warning message
-            await message.reply_text(
-                f"⚠️ **Forbidden word detected!**\n"
-                f"User muted for **{BAN_DURATION} minutes**."
-            )
-
-        except Exception as e:
-            print(e)
+    # IMPORTANT
+    # Do NOT return here
+    # Otherwise commands won't work
+    # Let other handlers work normally
 
 @Client.on_message(filters.group & filters.text & filters.incoming)
 async def give_filter(client, message):
