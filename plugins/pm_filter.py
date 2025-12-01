@@ -85,8 +85,6 @@ SPELL_CHECK = {}
     # Otherwise commands won't work
     # Let other handlers work normally
 
-from pyrogram import Client, filters
-
 # URL pattern regex
 url_regex = r"(https?://[^\s]+)"
 
