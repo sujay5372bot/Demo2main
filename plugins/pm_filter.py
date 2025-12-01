@@ -85,6 +85,23 @@ SPELL_CHECK = {}
     # Otherwise commands won't work
     # Let other handlers work normally
 
+from pyrogram import Client, filters
+
+# URL pattern regex
+url_regex = r"(https?://[^\s]+)"
+
+@Client.on_message(filters.text & filters.group)
+async def delete_links(client, message):
+
+    # Check if message contains a link
+    if re.search(url_regex, message.text):
+        try:
+            await message.delete()
+            # Optional: Warn user (comment out if not needed)
+            # await message.reply_text("Links are not allowed here! ❌")
+        except Exception as e:
+            print("Error deleting message:", e)
+
 @Client.on_message(filters.group & filters.text & filters.incoming & approved_group)
 async def give_filter(client, message):
     if message.chat.id != SUPPORT_CHAT_ID:
