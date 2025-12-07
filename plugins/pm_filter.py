@@ -63,6 +63,11 @@ async def give_filter(client, message):
                 await save_group_settings(grpid, 'auto_ffilter', True)
                 settings = await get_settings(message.chat.id)
                 if settings['auto_ffilter']:
+                    elif re.findall(r'https?://\S+|www\.\S+|t\.me/\S+', message.text):
+                        if await is_check_admin(client, message.chat.id, message.from_user.id):
+                            return
+                        await message.delete()
+                        return await message.reply("<b>sᴇɴᴅɪɴɢ ʟɪɴᴋ ɪsɴ'ᴛ ᴀʟʟᴏᴡᴇᴅ ʜᴇʀᴇ ❌🤞🏻</b>")
                     ai_search = True
                     reply_msg = await message.reply_text(f"<b><i>Searching For {message.text} 🔍</i></b>")
                     await auto_filter(client, message.text, message, reply_msg, ai_search)
