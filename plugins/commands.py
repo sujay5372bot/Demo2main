@@ -93,7 +93,7 @@ async def on_member_update(client, event: ChatMemberUpdated):
                 members = "Unknown"
 
             # Add to pending database
-            await groupDB.add_pending(chat.id)
+            await groupdb.add_pending(chat.id)
 
             text = f"""
 🔔 **Bot Added To New Group (Pending Approval)**
@@ -130,8 +130,8 @@ async def approval_cb(client, query):
             return await query.answer("❌ You are not authorized!", show_alert=True)
 
         if action == "approve_group":
-            await groupDB.add_approved(group_id)
-            await groupDB.remove_pending(group_id)
+            await groupdb.add_approved(group_id)
+            await groupdb.remove_pending(group_id)
             await query.edit_message_text(f"✅ Approved group `{group_id}`")
 
             try:
@@ -140,8 +140,8 @@ async def approval_cb(client, query):
                 pass
 
         elif action == "reject_group":
-            await groupDB.remove_pending(group_id)
-            await groupDB.remove_approved(group_id)
+            await groupdb.remove_pending(group_id)
+            await groupdb.remove_approved(group_id)
             await query.edit_message_text(f"❌ Rejected group `{group_id}`")
 
             try:
@@ -154,8 +154,8 @@ async def approval_cb(client, query):
 
 @Client.on_message(filters.command("list_groups") & filters.user(ADMINS))
 async def list_groups(client, message):
-    approved = await groupDB.get_approved()
-    pending = await groupDB.get_pending()
+    approved = await groupdb.get_approved()
+    pending = await groupdb.get_pending()
 
     text = f"""
 📌 **Approved Groups:** {len(approved)}
@@ -170,8 +170,8 @@ async def list_groups(client, message):
 async def approve_cmd(client, message):
     try:
         group_id = int(message.text.split()[1])
-        await groupDB.add_approved(group_id)
-        await groupDB.remove_pending(group_id)
+        await groupdb.add_approved(group_id)
+        await groupdb.remove_pending(group_id)
         await message.reply_text(f"Approved group {group_id}")
     except:
         await message.reply_text("Usage: /approve <group_id>")
@@ -180,8 +180,8 @@ async def approve_cmd(client, message):
 async def reject_cmd(client, message):
     try:
         group_id = int(message.text.split()[1])
-        await groupDB.remove_pending(group_id)
-        await groupDB.remove_approved(group_id)
+        await groupdb.remove_pending(group_id)
+        await groupdb.remove_approved(group_id)
         await client.leave_chat(group_id)
         await message.reply_text(f"Rejected & Left group {group_id}")
     except:
