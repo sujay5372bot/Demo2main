@@ -37,9 +37,9 @@ SPELL_CHECK = {}
 
 @Client.on_message(filters.group & filters.text & filters.incoming)
 async def give_filter(client, message):
-    approved = await groupdb.is_approved(message.chat.id)
-    if not approved:
-        return   # ❌ Do not send welcome message
+    # approved = await groupdb.is_approved(message.chat.id)
+    # if not approved:
+    #     return   # ❌ Do not send welcome message
 
     if message.chat.id != SUPPORT_CHAT_ID:
         settings = await get_settings(message.chat.id)
@@ -92,9 +92,9 @@ async def give_filter(client, message):
 
 @Client.on_message(filters.private & filters.text & filters.incoming)
 async def pm_text(bot, message):
-    approved = await groupdb.is_approved(message.chat.id)
-    if not approved:
-        return   # ❌ Do not send welcome message
+    # approved = await groupdb.is_approved(message.chat.id)
+    # if not approved:
+    #     return   # ❌ Do not send welcome message
 
     content = message.text
     user = message.from_user.first_name
@@ -139,9 +139,9 @@ async def pm_text(bot, message):
 
 @Client.on_callback_query(filters.regex(r"^next"))
 async def next_page(bot, query):
-    approved = await groupdb.is_approved(message.chat.id)
-    if not approved:
-        return   # ❌ Do not send welcome message
+    # approved = await groupdb.is_approved(message.chat.id)
+    # if not approved:
+    #     return   # ❌ Do not send welcome message
 
     ident, req, key, offset = query.data.split("_")
     curr_time = datetime.now(pytz.timezone('Asia/Kolkata')).time()
@@ -292,9 +292,9 @@ async def next_page(bot, query):
 
 @Client.on_callback_query(filters.regex(r"^spol"))
 async def advantage_spoll_choker(bot, query):
-    approved = await groupdb.is_approved(message.chat.id)
-    if not approved:
-        return   # ❌ Do not send welcome message
+    # approved = await groupdb.is_approved(message.chat.id)
+    # if not approved:
+    #     return   # ❌ Do not send welcome message
 
     _, user, movie_ = query.data.split('#')
     movies = SPELL_CHECK.get(query.message.reply_to_message.id)
