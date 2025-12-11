@@ -17,6 +17,10 @@ from database.connections_mdb import active_connection
 from urllib.parse import quote_plus
 from TechVJ.util.file_properties import get_name, get_hash, get_media_file_size
 
+approved = await groupdb.is_approved(message.chat.id)
+if not approved:
+    return   # ❌ Do not send welcome message
+
 # --- GROUP APPROVAL CHECK FUNCTION ---
 async def is_approved_group(chat_id):
     approved_groups = await groupdb.get_approved()
