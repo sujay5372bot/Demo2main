@@ -16,12 +16,12 @@ from pyrogram.errors.exceptions.bad_request_400 import MessageTooLong, PeerIdInv
 from utils import get_settings, pub_is_subscribed, get_size, is_subscribed, save_group_settings, temp, verify_user, check_token, check_verification, get_token, get_shortlink, get_tutorial, get_seconds
 from database.connections_mdb import active_connection
 
-approved = await groupdb.is_approved(message.chat.id)
-if not approved:
-    return   # ❌ Do not send welcome message
 
 @Client.on_message(filters.new_chat_members & filters.group)
 async def save_group(bot, message):
+    approved = await groupdb.is_approved(message.chat.id)
+    if not approved:
+        return   # ❌ Do not send welcome message
     r_j_check = [u.id for u in message.new_chat_members]
     if temp.ME in r_j_check:
         if not await db.get_chat(message.chat.id):
