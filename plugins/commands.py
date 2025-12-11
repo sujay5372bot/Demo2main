@@ -19,7 +19,7 @@ from TechVJ.util.file_properties import get_name, get_hash, get_media_file_size
 
 # --- GROUP APPROVAL CHECK FUNCTION ---
 async def is_approved_group(chat_id):
-    approved_groups = await groupDB.get_approved()
+    approved_groups = await groupdb.get_approved()
     return chat_id in approved_groups
 
 # --- CREATE FILTER FOR EASY USE ---
