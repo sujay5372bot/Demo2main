@@ -22,9 +22,6 @@ from TechVJ.util.file_properties import get_name, get_hash, get_media_file_size
 from plugins.Extra.save_restrict_content.save import run_save, get_link
 from plugins.Extra.save_restrict_content.join import join
 
-approved = await groupdb.is_approved(message.chat.id)
-if not approved:
-    return   # ❌ Do not send welcome message
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.ERROR)
@@ -40,6 +37,10 @@ SPELL_CHECK = {}
 
 @Client.on_message(filters.group & filters.text & filters.incoming)
 async def give_filter(client, message):
+    approved = await groupdb.is_approved(message.chat.id)
+    if not approved:
+        return   # ❌ Do not send welcome message
+
     if message.chat.id != SUPPORT_CHAT_ID:
         settings = await get_settings(message.chat.id)
         chatid = message.chat.id 
@@ -91,6 +92,10 @@ async def give_filter(client, message):
 
 @Client.on_message(filters.private & filters.text & filters.incoming)
 async def pm_text(bot, message):
+    approved = await groupdb.is_approved(message.chat.id)
+    if not approved:
+        return   # ❌ Do not send welcome message
+
     content = message.text
     user = message.from_user.first_name
     user_id = message.from_user.id
@@ -134,6 +139,10 @@ async def pm_text(bot, message):
 
 @Client.on_callback_query(filters.regex(r"^next"))
 async def next_page(bot, query):
+    approved = await groupdb.is_approved(message.chat.id)
+    if not approved:
+        return   # ❌ Do not send welcome message
+
     ident, req, key, offset = query.data.split("_")
     curr_time = datetime.now(pytz.timezone('Asia/Kolkata')).time()
     if int(req) not in [query.from_user.id, 0]:
@@ -283,6 +292,10 @@ async def next_page(bot, query):
 
 @Client.on_callback_query(filters.regex(r"^spol"))
 async def advantage_spoll_choker(bot, query):
+    approved = await groupdb.is_approved(message.chat.id)
+    if not approved:
+        return   # ❌ Do not send welcome message
+
     _, user, movie_ = query.data.split('#')
     movies = SPELL_CHECK.get(query.message.reply_to_message.id)
     if not movies:
