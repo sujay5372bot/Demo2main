@@ -19,9 +19,9 @@ from database.connections_mdb import active_connection
 
 @Client.on_message(filters.new_chat_members & filters.group)
 async def save_group(bot, message):
-    approved = await groupdb.is_approved(message.chat.id)
-    if not approved:
-        return   # ❌ Do not send welcome message
+    # approved = await groupdb.is_approved(message.chat.id)
+    # if not approved:
+    #     return   # ❌ Do not send welcome message
     r_j_check = [u.id for u in message.new_chat_members]
     if temp.ME in r_j_check:
         if not await db.get_chat(message.chat.id):
