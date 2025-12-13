@@ -3015,6 +3015,7 @@ async def advantage_spell_chok(client, name, msg, reply_msg, vj_search):
         k = await reply_msg.edit_text(text=script.I_CUDNT.format(mv_rqst), reply_markup=InlineKeyboardMarkup(button))
         await asyncio.sleep(30)
         await k.delete()
+        await message.delete()
         return
     movielist = []
     if not movies:
@@ -3027,6 +3028,7 @@ async def advantage_spell_chok(client, name, msg, reply_msg, vj_search):
         k = await reply_msg.edit_text(text=script.I_CUDNT.format(mv_rqst), reply_markup=InlineKeyboardMarkup(button))
         await asyncio.sleep(30)
         await k.delete()
+        await message.delete()
         return
     movielist += [movie.get('title') for movie in movies]
     movielist += [f"{movie.get('title')} {movie.get('year')}" for movie in movies]
@@ -3053,6 +3055,7 @@ async def advantage_spell_chok(client, name, msg, reply_msg, vj_search):
         k = await reply_msg.edit_text(text=script.I_CUDNT.format(mv_rqst), reply_markup=InlineKeyboardMarkup(button))
         await asyncio.sleep(30)
         await k.delete()
+        await message.delete()
         return
     else:
         btn = [
