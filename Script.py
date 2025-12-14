@@ -7,7 +7,7 @@ class script(object):
     START_TXT = """<b><blockquote>Hᴇʟʟᴏ {}, ᴍʏ ɴᴀᴍᴇ <a href=https://t.me/{}>{}</a></blockquote>
     
 </b>"""
-    OWNER_NME = """<a href='https://t.me/onefighterarmy'>SUJAY 😎</a>"""
+    OWNER_NME = """<b><a href='https://t.me/onefighterarmy'>SUJAY 😎</a></b>"""
 
     HELP_TXT = """<b>Hᴇʏ {}
 Hᴇʀᴇ Is Tʜᴇ Hᴇʟᴘ Fᴏʀ Mʏ Cᴏᴍᴍᴀɴᴅs.</b>"""
