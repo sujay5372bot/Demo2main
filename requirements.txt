@@ -1,4 +1,5 @@
 pyrofork==2.3.45
+beautifulsoup4
 tgcrypto 
 requests 
 bs4 
