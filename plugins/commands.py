@@ -53,6 +53,7 @@ def extract_gdflix_links(html):
         "cloud": None,
         "instant": None,
         "gofile": None,
+        "filesgram": None,
         "pixeldrain": None
     }
 
@@ -63,10 +64,12 @@ def extract_gdflix_links(html):
             links["cloud"] = link
         elif "instant" in link or "direct" in link:
             links["instant"] = link
-        elif "gofile.io" in link:
+        elif "gofile" in link:
             links["gofile"] = link
-        elif "pixeldrain.com" in link:
+        elif "pixeldrain" in link:
             links["pixeldrain"] = link
+        elif "filesgram" in link:
+            links["filesgram"] = link
 
     return links
 
@@ -99,7 +102,7 @@ async def gdflix_bypass_cmd(client, message):
         )
 
     gd_url = message.command[1]
-    sts = await message.reply_text("🔍 GDFlix link bypass ho raha hai...")
+    sts = await message.reply_text("🔍 GDFlix bypassing...")
 
     try:
         html = await fetch_gdflix_html(gd_url)
@@ -115,9 +118,10 @@ async def gdflix_bypass_cmd(client, message):
 ⚡ **INSTANT DL :** {f"[Click Here]({links['instant']})" if links['instant'] else "Not Found"}
 🗂 **GOFILE :** {f"[Click Here]({links['gofile']})" if links['gofile'] else "Not Found"}
 🌀 **PIXELDRAIN :** {f"[Click Here]({links['pixeldrain']})" if links['pixeldrain'] else "Not Found"}
+💠 **TELEGRAM :** {f"[Click Here]({links['filesgram']})"if links['filesgram'] else "Not Found"}
 
 ━━━━━━━━━━━━━━━━━━  
-⚡ **Powered By @PBX1_BOTS 🚀**
+⚡ **Powered By @ONEFIGHTERARMY 😎**
 """
 
         await sts.edit_text(
