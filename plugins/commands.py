@@ -2,7 +2,8 @@
 # Subscribe YouTube Channel For Amazing Bot @Tech_VJ
 # Ask Doubt on telegram @KingVJ01
 
-import os, string, logging, random, asyncio, time, datetime, re, sys, json, base64
+import os, string, logging, random, asyncio, time, datetime, re, sys, json, base64, aiohttp
+from bs4 import BeautifulSoup
 from Script import script
 from pyrogram import Client, filters, enums
 from pyrogram.errors import ChatAdminRequired, FloodWait
@@ -36,6 +37,96 @@ BATCH_FILES = {}
 join_db = JoinReqs
 OWNER_ID = ADMINS[0] #First admin is owner 
 
+async def fetch_gdflix_html(url):
+    headers = {
+        "User-Agent": "Mozilla/5.0"
+    }
+    async with aiohttp.ClientSession(headers=headers) as session:
+        async with session.get(url, timeout=20) as resp:
+            return await resp.text()
+
+
+def extract_gdflix_links(html):
+    soup = BeautifulSoup(html, "html.parser")
+
+    links = {
+        "cloud": None,
+        "instant": None,
+        "gofile": None,
+        "pixeldrain": None
+    }
+
+    for a in soup.find_all("a", href=True):
+        link = a["href"]
+
+        if "drive" in link or "cloud" in link:
+            links["cloud"] = link
+        elif "instant" in link or "direct" in link:
+            links["instant"] = link
+        elif "gofile.io" in link:
+            links["gofile"] = link
+        elif "pixeldrain.com" in link:
+            links["pixeldrain"] = link
+
+    return links
+
+@Client.on_message(filters.command("gd") & filters.incoming)
+async def gdflix_bypass_cmd(client, message):
+
+    # 🔒 AUTH CHANNEL CHECK
+    if AUTH_CHANNEL and not await is_subscribed(client, message):
+        try:
+            invite_link = await client.create_chat_invite_link(int(AUTH_CHANNEL))
+        except:
+            invite_link = AUTH_CHANNEL
+
+        buttons = [[
+            InlineKeyboardButton(
+                "🔔 Join Update Channel",
+                url=invite_link.invite_link if hasattr(invite_link, "invite_link") else invite_link
+            )
+        ]]
+
+        return await message.reply_text(
+            "❌ **You must join the update channel to use this command**",
+            reply_markup=InlineKeyboardMarkup(buttons)
+        )
+
+    # ❗ COMMAND USAGE CHECK
+    if len(message.command) < 2:
+        return await message.reply_text(
+            "❌ Usage:\n/gd <gdflix link>"
+        )
+
+    gd_url = message.command[1]
+    sts = await message.reply_text("🔍 GDFlix link bypass ho raha hai...")
+
+    try:
+        html = await fetch_gdflix_html(gd_url)
+        links = extract_gdflix_links(html)
+
+        text = f"""
+📁 **Title**
+🎥 Movie.Name.2024.1080p.WEB-DL
+
+📦 **Size :-** 1.2GB
+
+☁️ **CLOUD DOWNLOAD :** {f"[Click Here]({links['cloud']})" if links['cloud'] else "Not Found"}
+⚡ **INSTANT DL :** {f"[Click Here]({links['instant']})" if links['instant'] else "Not Found"}
+🗂 **GOFILE :** {f"[Click Here]({links['gofile']})" if links['gofile'] else "Not Found"}
+🌀 **PIXELDRAIN :** {f"[Click Here]({links['pixeldrain']})" if links['pixeldrain'] else "Not Found"}
+
+━━━━━━━━━━━━━━━━━━  
+⚡ **Powered By @PBX1_BOTS 🚀**
+"""
+
+        await sts.edit_text(
+            text,
+            disable_web_page_preview=True
+        )
+
+    except Exception as e:
+        await sts.edit_text(f"❌ Error:\n`{e}`")
 
 #from datetime import timedelta
 
