@@ -93,15 +93,7 @@ async def give_filter(client, message):
                 print(e)
             
         manual = await manual_filters(client, message)
-        settings = await get_settings(message.chat.id)
-        if manual is False and message.text and settings.get("badword_filter", True):
-            text = message.text.lower()
-            for word in BAD_WORDS:
-                if word in text:
-                    if await is_check_admin(client, message.chat.id, message.from_user.id):
-                        return
-                    await message.delete()
-                    return await message.reply("<b>❌ Bad word not allowed in this group</b>")
+        if manual == False:
             if re.findall(r'https?://\S+|www\.\S+|t\.me/\S+', message.text):
                 if await is_check_admin(client, message.chat.id, message.from_user.id):
                     return
