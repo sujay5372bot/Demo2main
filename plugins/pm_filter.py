@@ -73,6 +73,20 @@ SPELL_CHECK = {}
 
 @Client.on_message(filters.group & filters.text & filters.incoming)
 async def give_filter(client, message):
+# 🔥 FORWARD TAG REMOVER (Instant Tag Remover Logic)
+    if message.forward_from or message.forward_from_chat:
+        if await is_check_admin(client, message.chat.id, message.from_user.id):
+            return  # admin ko allow
+
+        try:
+            await message.copy(
+                chat_id=message.chat.id,
+                reply_to_message_id=message.reply_to_message_id
+            )
+            await message.delete()
+            return
+        except Exception as e:
+            print(e)
     # approved = await groupdb.is_approved(message.chat.id)
     # if not approved:
     #     return   # ❌ Do not send welcome message
