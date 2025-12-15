@@ -30,7 +30,8 @@
 - [x] Token Verification 
 - [x] Send All Button 
 - [x] Custom Tutorial Button
-- [x] Bot Pm File Auto Delete 
+- [x] Bot Pm File Auto Delete
+- [x] Forward Header Remove 
 
 Join My <a href='https://telegram.dog/vj_botz'>Update Channel</a> For More Update Regarding Repo.</b>
 
