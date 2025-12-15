@@ -35,6 +35,42 @@ BUTTONS1 = {}
 BUTTONS2 = {}
 SPELL_CHECK = {}
 
+BAD_WORDS = [
+    "sex",
+    "madarchod",
+    "xxx",
+    "18+",
+    "🥵",
+    "fuck",
+    "randi",
+    "content"
+]
+
+@Client.on_message(filters.group & filters.command("badword"))
+async def badword_toggle(client, message):
+    if not await is_check_admin(client, message.chat.id, message.from_user.id):
+        return await message.reply("❌ Only admins can use this command")
+
+    if len(message.command) < 2:
+        return await message.reply(
+            "Usage:\n"
+            "`/badword on` – Enable bad word filter\n"
+            "`/badword off` – Disable bad word filter`"
+        )
+
+    cmd = message.command[1].lower()
+
+    if cmd == "on":
+        await save_group_settings(message.chat.id, "badword_filter", True)
+        await message.reply("✅ Bad word filter **ENABLED**")
+
+    elif cmd == "off":
+        await save_group_settings(message.chat.id, "badword_filter", False)
+        await message.reply("🚫 Bad word filter **DISABLED**")
+
+    else:
+        await message.reply("❌ Invalid option. Use `/badword on` or `/badword off`")
+
 @Client.on_message(filters.group & filters.text & filters.incoming)
 async def give_filter(client, message):
     # approved = await groupdb.is_approved(message.chat.id)
@@ -57,7 +93,15 @@ async def give_filter(client, message):
                 print(e)
             
         manual = await manual_filters(client, message)
-        if manual == False:
+        settings = await get_settings(message.chat.id)
+        if manual is False and message.text and settings.get("badword_filter", True):
+            text = message.text.lower()
+            for word in BAD_WORDS:
+                if word in text:
+                    if await is_check_admin(client, message.chat.id, message.from_user.id):
+                        return
+                    await message.delete()
+                    return await message.reply("<b>❌ Bad word not allowed in this group</b>")
             if re.findall(r'https?://\S+|www\.\S+|t\.me/\S+', message.text):
                 if await is_check_admin(client, message.chat.id, message.from_user.id):
                     return
