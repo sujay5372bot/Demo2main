@@ -46,7 +46,7 @@ BAD_WORDS = [
     "content"
 ]
 
-@Client.on_message(filters.group & filters.command("badword"))
+@Client.on_message(filters.group & filters.command("badword") & filters.user(ADMINS))
 async def badword_toggle(client, message):
     if not await is_check_admin(client, message.chat.id, message.from_user.id):
         return await message.reply("❌ Only admins can use this command")
