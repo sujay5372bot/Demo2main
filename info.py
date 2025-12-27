@@ -20,7 +20,7 @@ def is_enabled(value, default):
 SESSION = environ.get('SESSION', 'TechVJBot')
 API_ID = int(environ.get('API_ID', '24935727'))
 API_HASH = environ.get('API_HASH', '3fd33336629324ecd664e9b6894f0909')
-BOT_TOKEN = environ.get('BOT_TOKEN', "8068805058:AAEPfMCxWc2erQq7_es0a0hVcHofITOHQ8Y")
+BOT_TOKEN = environ.get('BOT_TOKEN', "")
 
 # Bot settings
 CACHE_TIME = int(environ.get('CACHE_TIME', 1800))
@@ -53,7 +53,7 @@ DELETE_CHANNELS = [int(dch) if id_pattern.search(dch) else dch for dch in enviro
 
 # MongoDB information
 SECONDDB_URI = environ.get('SECONDDB_URI', "mongodb+srv://demo2main:demo2main@cluster05875444.6framb1.mongodb.net/?appName=Cluster05875444")
-DATABASE_URI = environ.get('DATABASE_URI', "mongodb+srv://Gsudbrn:Gsudbrn@cluster0288255685.5pxv5my.mongodb.net/?appName=Cluster0288255685")
+DATABASE_URI = environ.get('DATABASE_URI', "mongodb+srv://sujay53721_db_user:sujay53721_db_user@cluster07373646563737.h6q6n5f.mongodb.net/?appName=Cluster07373646563737")
 DATABASE_NAME = environ.get('DATABASE_NAME', "techvjautobot")
 COLLECTION_NAME = environ.get('COLLECTION_NAME', 'techvjcollection')
 
