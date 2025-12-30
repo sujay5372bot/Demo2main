@@ -121,7 +121,7 @@ async def gdflix_bypass_cmd(client, message):
 💠 **TELEGRAM :** {f"[Click Here]({links['filesgram']})"if links['filesgram'] else "Not Found"}
 
 ━━━━━━━━━━━━━━━━━━  
-⚡ **Powered By {OWNER_NME} 😎**
+⚡ **Powered By SUJAY 😎**
 """
 
         await sts.edit_text(
