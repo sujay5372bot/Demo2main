@@ -53,7 +53,7 @@ def extract_gdflix_links(html):
         "cloud": None,
         "instant": None,
         "gofile": None,
-        "filesgram": None,
+        "gdflix03_bot": None,
         "pixeldrain": None
     }
 
@@ -68,8 +68,8 @@ def extract_gdflix_links(html):
             links["gofile"] = link
         elif "pixeldrain" in link:
             links["pixeldrain"] = link
-        elif "filesgram" in link:
-            links["filesgram"] = link
+        elif "gdflix03_bot" in link:
+            links["gdflix03_bot"] = link
 
     return links
 
@@ -118,7 +118,7 @@ async def gdflix_bypass_cmd(client, message):
 ⚡ **INSTANT DL :** {f"[Click Here]({links['instant']})" if links['instant'] else "Not Found"}
 🗂 **GOFILE :** {f"[Click Here]({links['gofile']})" if links['gofile'] else "Not Found"}
 🌀 **PIXELDRAIN :** {f"[Click Here]({links['pixeldrain']})" if links['pixeldrain'] else "Not Found"}
-💠 **TELEGRAM :** {f"[Click Here]({links['filesgram']})"if links['filesgram'] else "Not Found"}
+💠 **TELEGRAM :** {f"[Click Here]({links['gdflix03_bot']})"if links['gdflix03_bot'] else "Not Found"}
 
 ━━━━━━━━━━━━━━━━━━  
 ⚡ **Powered By SUJAY 😎**
