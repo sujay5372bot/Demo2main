@@ -3089,6 +3089,7 @@ async def advantage_spell_chok(client, name, msg, reply_msg, vj_search):
         vj_ai_msg = await reply_msg.edit_text("<b><i>Advance Ai Try To Find Your Movie With Your Wrong Spelling.</i></b>")
         movienamelist = []
         movienamelist += [movie.get('title') for movie in movies]
+        await vj_ai_msg.delete()
         for techvj in movienamelist:
             try:
                 mv_rqst = mv_rqst.capitalize()
