@@ -2873,8 +2873,8 @@ async def auto_filter(client, name, msg, reply_msg, ai_search, spoll=False):
                 else:
                     await reply_msg.edit_text(f"❌ **No results found for:** `{search}`\n\n""👉 Spelling check karke dubara try karo.")
                     return
-                else:
-                    return
+            #    else:
+              #      return
         else:
             return
     else:
