@@ -2864,9 +2864,15 @@ async def auto_filter(client, name, msg, reply_msg, ai_search, spoll=False):
             search = search.replace(".", "")
             files, offset, total_results = await get_search_results(message.chat.id ,search, offset=0, filter=True)
             settings = await get_settings(message.chat.id)
+            # if not files:
+            #     await reply_msg.edit_text(f"❌ **No results found for:** `{search}`\n\n""👉 Spelling check karke dubara try karo.")
+            #     return
             if not files:
                 if settings["spell_check"]:
                     return await advantage_spell_chok(client, name, msg, reply_msg, ai_search)
+                else:
+                    await reply_msg.edit_text(f"❌ **No results found for:** `{search}`\n\n""👉 Spelling check karke dubara try karo.")
+                    return
                 else:
                     return
         else:
