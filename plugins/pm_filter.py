@@ -367,20 +367,31 @@ async def advantage_spoll_choker(bot, query):
                 k = (movie, files, offset, total_results)
                 ai_search = True
                 reply_msg = await query.message.edit_text(f"<b><i>Searching For {movie} 🔍</i></b>")
-                await auto_filter(bot, movie, query, reply_msg, ai_search, k)
+                await auto_filter(bot, movie, query.message, reply_msg, ai_search, k)
             else:
                 reqstr1 = query.from_user.id if query.from_user else 0
                 reqstr = await bot.get_users(reqstr1)
+                reply_msg = await query.message.edit_text(
+                f"⚠️ <b>Spelling Check Alert</b>\n\n"
+                f"❌ Aapki spelling match nahi hui\n"
+                f"🔎 System ne ye spelling try ki:\n"
+                f"➡️ <b>{movie}</b>\n\n"
+                f"ℹ️ Agar result na mile to spelling dobara check karein"
+                )
+                await asyncio.sleep(3)
                 button = [[
                     InlineKeyboardButton("💢 𝗿𝗲𝗾𝘂𝗲𝘀𝘁 💢", url="https://t.me/onefighterarmy")
                 ]]
                 if NO_RESULTS_MSG:
                     await bot.send_message(chat_id=LOG_CHANNEL, text=(script.NORSLTS.format(reqstr.id, reqstr.mention, movie)))
-                k = await query.message.edit(script.MVE_NT_FND, reply_markup=InlineKeyboardMarkup(button))
+                k = await query.message.edit_text(script.MVE_NT_FND, reply_markup=InlineKeyboardMarkup(button))
                 await asyncio.sleep(30)
-                await reply_msg.delete()
-                await k.delete()
-
+                try:
+                    
+              #  await reply_msg.delete()
+                    await k.delete()
+                except:
+                    pass
 # Year 
 @Client.on_callback_query(filters.regex(r"^years#"))
 async def years_cb_handler(client: Client, query: CallbackQuery):
