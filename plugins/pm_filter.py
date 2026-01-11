@@ -3071,7 +3071,7 @@ async def advantage_spell_chok(client, name, msg, reply_msg, vj_search):
         "", msg.text, flags=re.IGNORECASE)  # plis contribute some common words
     query = query.strip() + " movie"
     try:
-        movies = await get_poster(mv_rqst, bulk=True)
+        movies = await get_poster(query, bulk=True)
     except Exception as e:
         logger.exception(e)
         reqst_gle = mv_rqst.replace(" ", "+")
