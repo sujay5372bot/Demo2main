@@ -2862,7 +2862,7 @@ async def auto_filter(client, name, msg, reply_msg, ai_search, spoll=False):
             search = search.lower()
             find = search.split(" ")
             search = ""
-            removes = ["in","upload", "series", "full", "horror", "thriller", "mystery", "print", "file"]
+            removes = ["in","upload", "series", "full", "horror", "thriller", "mystery", "print", "file", "movies", "movie", "please"]
             for x in find:
                 if x in removes:
                     continue
