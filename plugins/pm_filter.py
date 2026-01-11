@@ -3,6 +3,7 @@
 # Ask Doubt on telegram @KingVJ01
 
 import os, logging, string, asyncio, time, re, ast, random, math, pytz, pyrogram
+from difflib import SequenceMatcher
 from datetime import datetime, timedelta, date, time
 from Script import script
 from info import *
@@ -21,6 +22,9 @@ from urllib.parse import quote_plus
 from TechVJ.util.file_properties import get_name, get_hash, get_media_file_size
 from plugins.Extra.save_restrict_content.save import run_save, get_link
 from plugins.Extra.save_restrict_content.join import join
+
+def similarity(a, b):
+    return SequenceMatcher(None, a.lower(), b.lower()).ratio()
 
 
 logger = logging.getLogger(__name__)
