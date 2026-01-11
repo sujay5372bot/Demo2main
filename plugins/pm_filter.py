@@ -3107,6 +3107,21 @@ async def advantage_spell_chok(client, name, msg, reply_msg, vj_search):
     movielist += [movie.get('title') for movie in movies]
     movielist += [f"{movie.get('title')} {movie.get('year')}" for movie in movies]
     SPELL_CHECK[mv_id] = movielist
+
+    # 🚀 AI FUZZY MATCH SYSTEM
+    best = None
+    score = 0
+
+    for title in movielist:
+        s = similarity(mv_rqst, title)
+        if s > score:
+            score = s
+            best = title
+
+    if best and score > 0.65:
+        await reply_msg.edit_text(f"<b>🤖 AI corrected your spelling :</b>\n\n<b>{best}</b>")
+        await auto_filter(client, best, msg, reply_msg, False)
+        return
     if AI_SPELL_CHECK and vj_search:
         vj_search_new = False
         vj_ai_msg = await reply_msg.edit_text("<b><i>Advance Ai Try To Find Your Movie With Your Wrong Spelling.</i></b>")
