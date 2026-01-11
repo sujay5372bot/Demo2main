@@ -375,7 +375,7 @@ async def advantage_spoll_choker(bot, query):
             else:
                 reqstr1 = query.from_user.id if query.from_user else 0
                 reqstr = await bot.get_users(reqstr1)
-                reply_msg = await query.message.edit_text(
+                msg = await query.message.edit_text(
                 f"⚠️ <b>Spelling Check Alert</b>\n\n"
                 f"❌ Aapki spelling match nahi hui\n"
                 f"🔎 System ne ye spelling try ki:\n"
@@ -388,12 +388,12 @@ async def advantage_spoll_choker(bot, query):
                 ]]
                 if NO_RESULTS_MSG:
                     await bot.send_message(chat_id=LOG_CHANNEL, text=(script.NORSLTS.format(reqstr.id, reqstr.mention, movie)))
-                k = await query.message.edit_text(script.MVE_NT_FND, reply_markup=InlineKeyboardMarkup(button))
+                msg = await msg.edit_text(script.MVE_NT_FND, reply_markup=InlineKeyboardMarkup(button))
                 await asyncio.sleep(30)
                 try:
                     
               #  await reply_msg.delete()
-                    await k.delete()
+                    await msg.delete()
                 except:
                     pass
 # Year 
