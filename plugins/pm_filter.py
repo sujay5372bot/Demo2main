@@ -2880,7 +2880,7 @@ async def auto_filter(client, name, msg, reply_msg, ai_search, spoll=False):
             #     return
             if not files:
                 if settings["spell_check"]:
-                    return await advantage_spell_chok(client, name, msg, reply_msg, ai_search)
+                    return await advantage_spell_chok(client, name, msg, reply_msg, True)
                 else:
                     await reply_msg.edit_text(f"❌ **No results found for:** `{search}`\n\n""👉 Spelling check karke dubara try karo.")
                     return
